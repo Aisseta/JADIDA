@@ -19,7 +19,6 @@ class AuthDto {
 exports.AuthDto = AuthDto;
 __decorate([
     (0, class_validator_1.IsEmail)(),
-    (0, class_validator_1.IsEmpty)(),
     __metadata("design:type", String)
 ], AuthDto.prototype, "email", void 0);
 __decorate([

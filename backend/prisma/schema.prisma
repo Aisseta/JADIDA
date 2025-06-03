@@ -8,18 +8,21 @@ datasource db {
 }
 
 model User {
-  id_user           Int      @id @default(autoincrement())
-  url_photo_profil  String?  // not obligatory
-  lastname          String
-  firstname         String   
-  pseudo            String   @unique
-  sexe              String
-  email             String   @unique
-  password          String
-  address           String?  @unique
-  city              String?
-  description       String?
-  
+  id_user               Int      @id @default(autoincrement())
+  url_photo_profil      String?  // not obligatory
+  lastname              String
+  firstname             String   
+  role                  String    
+  pseudo                String   @unique
+  sexe                  String
+  email                 String   @unique
+  password              String
+  address               String?  @unique
+  city                  String?
+  description           String?
+  createdAt             DateTime @default(now())
+  acceptedPrivacyPolicy Boolean  @default(false)
+ 
 }
 
 
