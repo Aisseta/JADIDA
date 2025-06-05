@@ -12,21 +12,71 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthDto = void 0;
 const class_validator_1 = require("class-validator");
 class AuthDto {
-    email;
-    age;
     lastname;
+    firstname;
+    role;
+    pseudo;
+    sexe;
+    email;
+    password;
+    acceptedPrivacyPolicy;
+    url_photo_profil;
+    address;
+    city;
+    description;
 }
 exports.AuthDto = AuthDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "lastname", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "firstname", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "role", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "pseudo", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "sexe", void 0);
 __decorate([
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], AuthDto.prototype, "email", void 0);
 __decorate([
-    (0, class_validator_1.IsAlphanumeric)(),
-    __metadata("design:type", Number)
-], AuthDto.prototype, "age", void 0);
-__decorate([
-    (0, class_validator_1.IsEmpty)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], AuthDto.prototype, "lastname", void 0);
+], AuthDto.prototype, "password", void 0);
+__decorate([
+    (0, class_validator_1.IsBoolean)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Boolean)
+], AuthDto.prototype, "acceptedPrivacyPolicy", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "url_photo_profil", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "address", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "city", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], AuthDto.prototype, "description", void 0);
 //# sourceMappingURL=auth.dto.js.map

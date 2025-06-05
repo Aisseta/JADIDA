@@ -15,14 +15,17 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
-const auth_dto_1 = require("../dto/auth.dto");
+const dto_1 = require("../dto");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
         this.authService = authService;
     }
-    register(authDto) {
-        console.log({});
+    register(dto) {
+        console.log({
+            dto,
+        });
+        return this.authService.register(dto);
     }
 };
 exports.AuthController = AuthController;
@@ -30,7 +33,7 @@ __decorate([
     (0, common_1.Post)('register'),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [auth_dto_1.AuthDto]),
+    __metadata("design:paramtypes", [dto_1.AuthDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "register", null);
 exports.AuthController = AuthController = __decorate([

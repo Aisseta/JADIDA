@@ -17,9 +17,9 @@ let PrismaService = class PrismaService extends client_1.PrismaClient {
         super({
             datasources: {
                 db: {
-                    url: 'postegresql:jadida_user:jadida@localhost:5432/jadida_db?schema=public'
-                }
-            }
+                    url: process.env.DATABASE_URL,
+                },
+            },
         });
     }
 };

@@ -7,6 +7,7 @@ export declare class UserController {
         url_photo_profil: string | null;
         lastname: string;
         firstname: string;
+        role: string;
         pseudo: string;
         sexe: string;
         email: string;
@@ -14,5 +15,7 @@ export declare class UserController {
         address: string | null;
         city: string | null;
         description: string | null;
+        createdAt: Date;
+        acceptedPrivacyPolicy: boolean;
     }>;
 }
