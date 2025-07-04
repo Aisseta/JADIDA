@@ -5,26 +5,28 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-};
+}
 
 model User {
   id_user               Int        @id @default(autoincrement())
-  url_photo_profil      String?  
+  url_photo_profil      String?
   lastname              String
-  firstname             String   
-  role                  String    
-
+  firstname             String
+  role                  String
   pseudo                String     @unique
   sexe                  String
   email                 String     @unique
   password              String
-  address               String?  
+  address               String?
   city                  String?
   description           String?
   createdAt             DateTime   @default(now())
   acceptedPrivacyPolicy Boolean    @default(false)
-
   clothings             Clothing[]
+  transactions          Transaction[]
+  evaluations           Evaluation[]
+  exchangesRequested    Exchange[] @relation("Requester")
+  exchangesOwned        Exchange[] @relation("Owner")
 }
 
 model Clothing {
@@ -40,51 +42,45 @@ model Clothing {
   value_jadis         Float    @default(0)
   is_available        Boolean  @default(true)
   date_added          DateTime @default(now())
-
   user                User     @relation(fields: [user_id], references: [id_user])
   user_id             Int
+  transactions        Transaction[]
+  receivedInExchange  Exchange[] @relation("ReceivedClothing")
+  exchangedInExchange Exchange[] @relation("ExchangedClothing")
 }
 
 model Transaction {
-  id_transaction   Int      @id @default(autoincrement())
-  user             User     @relation(fields: [user_id], references: [id_user])
+  id_transaction   Int         @id @default(autoincrement())
+  user             User        @relation(fields: [user_id], references: [id_user])
   user_id          Int
-  clothing         Clothing @relation(fields: [clothing_id], references: [id_clothing])
+  clothing         Clothing    @relation(fields: [clothing_id], references: [id_clothing])
   clothing_id      Int
   amount_jadis     Float
-  transaction_date DateTime @default(now())
+  transaction_date DateTime    @default(now())
+  evaluations      Evaluation[]
 }
 
 model Exchange {
   id_exchange           Int      @id @default(autoincrement())
-  
   clothing_received     Clothing @relation("ReceivedClothing", fields: [clothing_received_id], references: [id_clothing])
   clothing_received_id  Int
-
   clothing_exchanged    Clothing @relation("ExchangedClothing", fields: [clothing_exchanged_id], references: [id_clothing])
   clothing_exchanged_id Int
-
   requester             User     @relation("Requester", fields: [requester_id], references: [id_user])
   requester_id          Int
-
   owner                 User     @relation("Owner", fields: [owner_id], references: [id_user])
   owner_id              Int
-
-  status                String   // ex: 'pending', 'accepted', 'rejected', 'cancelled'
+  status                String
   exchange_date         DateTime @default(now())
 }
 
 model Evaluation {
-  id_evaluation   Int       @id @default(autoincrement())
-  note            Int       // Note de l'évaluation (ex: 1 à 5)
-  commentaire     String?   // Commentaire optionnel
-  createdAt       DateTime  @default(now())
-
-  // Relation avec auteur de l'evaluation
-  user            User      @relation(fields: [user_id], references: [id_user])
+  id_evaluation   Int         @id @default(autoincrement())
+  note            Int
+  commentaire     String?
+  createdAt       DateTime    @default(now())
+  user            User        @relation(fields: [user_id], references: [id_user])
   user_id         Int
-
-  // Relation avec evaluation liée à une transaction
   transaction     Transaction @relation(fields: [transaction_id], references: [id_transaction])
   transaction_id  Int
 }

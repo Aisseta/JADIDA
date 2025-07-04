@@ -16,6 +16,7 @@ exports.AuthController = void 0;
 const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const dto_1 = require("../dto");
+const login_dto_1 = require("../dto/login.dto");
 let AuthController = class AuthController {
     authService;
     constructor(authService) {
@@ -27,6 +28,19 @@ let AuthController = class AuthController {
         });
         return this.authService.register(dto);
     }
+    async login(logindto, res) {
+        const token = await this.authService.login(logindto);
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+        });
+        return { message: 'Connexion réussie' };
+    }
+    logout(res) {
+        res.clearCookie('token');
+        return { message: 'Logout successful' };
+    }
 };
 exports.AuthController = AuthController;
 __decorate([
@@ -36,6 +50,21 @@ __decorate([
     __metadata("design:paramtypes", [dto_1.AuthDto]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "register", null);
+__decorate([
+    (0, common_1.Post)('login'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [login_dto_1.LoginDto, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "login", null);
+__decorate([
+    (0, common_1.Post)('logout'),
+    __param(0, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], AuthController.prototype, "logout", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService])
