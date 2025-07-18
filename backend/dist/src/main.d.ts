@@ -1,1 +1,1 @@
-export {};
+import "dd-trace/init";
