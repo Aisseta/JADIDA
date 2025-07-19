@@ -1,23 +1,18 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {Form,FormField,FormItem,FormLabel,FormControl,} from "@/components/ui/form";
+
 
 const formSchema = z.object({
   lastname: z.string().min(1, "Nom requis"),
   firstname: z.string().min(1, "Prénom requis"),
-  role: z.string().min(1, "Role requis"),
+  role: z.string().min(1, "Rôle requis"),
   pseudo: z.string().min(3, "Pseudo trop court"),
   sexe: z.string().min(1, "Sexe requis"),
   email: z.string().email("Email invalide"),
@@ -25,7 +20,6 @@ const formSchema = z.object({
   acceptedPrivacyPolicy: z.boolean().refine(val => val === true, {
     message: "Vous devez accepter la politique de confidentialité",
   }),
-  // Champs optionnels - tu peux les ajouter si besoin
   url_photo_profil: z.string().optional(),
   address: z.string().optional(),
   city: z.string().optional(),
@@ -33,6 +27,8 @@ const formSchema = z.object({
 });
 
 export default function RegisterPage() {
+  const router = useRouter();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,13 +43,22 @@ export default function RegisterPage() {
     },
   });
 
+  // ✅ Soumission du formulaire
   async function onSubmit(data: z.infer<typeof formSchema>) {
+    
+    const url = `${process.env.NEXT_PUBLIC_API_URL}/auth/register`; 
+    console.log(url);
+    
     try {
-      const response = await fetch("http://localhost:3003/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/auth/register`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -63,15 +68,20 @@ export default function RegisterPage() {
 
       const result = await response.json();
       console.log("Inscription réussie :", result);
-      // Ici tu peux rediriger ou afficher un message de succès
+      router.push("/login"); // redirection si la connexion as
     } catch (error) {
       console.error("Erreur lors de la requête d'inscription", error);
     }
   }
 
+  // ✅ Rendu du formulaire
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-md mx-auto">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 max-w-md mx-auto"
+      >
+        {/* Nom */}
         <FormField
           control={form.control}
           name="lastname"
@@ -84,6 +94,8 @@ export default function RegisterPage() {
             </FormItem>
           )}
         />
+
+        {/* Prénom */}
         <FormField
           control={form.control}
           name="firstname"
@@ -96,6 +108,8 @@ export default function RegisterPage() {
             </FormItem>
           )}
         />
+
+        {/* Rôle */}
         <FormField
           control={form.control}
           name="role"
@@ -108,6 +122,8 @@ export default function RegisterPage() {
             </FormItem>
           )}
         />
+
+        {/* Pseudo */}
         <FormField
           control={form.control}
           name="pseudo"
@@ -120,6 +136,8 @@ export default function RegisterPage() {
             </FormItem>
           )}
         />
+
+        {/* Sexe */}
         <FormField
           control={form.control}
           name="sexe"
@@ -127,11 +145,13 @@ export default function RegisterPage() {
             <FormItem>
               <FormLabel>Sexe</FormLabel>
               <FormControl>
-                <Input placeholder="male/female" {...field} />
+                <Input placeholder="masculin/feminin" {...field} />
               </FormControl>
             </FormItem>
           )}
         />
+
+        {/* Email */}
         <FormField
           control={form.control}
           name="email"
@@ -144,6 +164,8 @@ export default function RegisterPage() {
             </FormItem>
           )}
         />
+
+        {/* Mot de passe */}
         <FormField
           control={form.control}
           name="password"
@@ -156,6 +178,8 @@ export default function RegisterPage() {
             </FormItem>
           )}
         />
+
+        {/* Politique de confidentialité */}
         <FormField
           control={form.control}
           name="acceptedPrivacyPolicy"
@@ -168,6 +192,8 @@ export default function RegisterPage() {
             </FormItem>
           )}
         />
+
+        {/* Bouton */}
         <Button type="submit">S'inscrire</Button>
       </form>
     </Form>
